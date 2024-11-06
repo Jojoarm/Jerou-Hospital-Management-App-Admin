@@ -78,6 +78,50 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  const addDoctor = async (
+    name,
+    email,
+    password,
+    docImg,
+    experience,
+    fee,
+    about,
+    speciality,
+    qualification,
+    address
+  ) => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post(
+        `${backendUrl}/api/admin/add-doctor`,
+        {
+          name,
+          email,
+          password,
+          docImg,
+          experience,
+          fee,
+          about,
+          speciality,
+          qualification,
+          address,
+        },
+        { headers: { aToken } }
+      );
+
+      if (data.success) {
+        setIsLoading(false);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
   const value = {
     aToken,
     setAToken,
@@ -89,6 +133,7 @@ const AdminContextProvider = (props) => {
     adminSignup,
     adminLogin,
     getAdmin,
+    addDoctor,
   };
 
   return (
