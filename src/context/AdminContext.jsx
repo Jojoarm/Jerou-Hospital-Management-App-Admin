@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -11,6 +11,7 @@ const AdminContextProvider = (props) => {
   );
   const [admin, setAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -122,6 +123,22 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  const getDoctors = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/admin/doctors`, {
+        headers: { aToken },
+      });
+      if (data.success) {
+        setDoctors(data.doctors);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
   const value = {
     aToken,
     setAToken,
@@ -134,7 +151,15 @@ const AdminContextProvider = (props) => {
     adminLogin,
     getAdmin,
     addDoctor,
+    getDoctors,
+    doctors,
   };
+
+  useEffect(() => {
+    if (aToken) {
+      getDoctors();
+    }
+  }, [aToken]);
 
   return (
     <AdminContext.Provider value={value}>
