@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { AdminContext } from './context/AdminContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +23,7 @@ import DoctorAppointments from './pages/Doctor/DoctorAppointments';
 function App() {
   const { aToken } = useContext(AdminContext);
   const { dToken } = useContext(DoctorContext);
+  const navigate = useNavigate();
 
   const AdminProtectedRoutes = ({ children }) => {
     if (!aToken) {
@@ -36,6 +37,10 @@ function App() {
     }
     return children;
   };
+
+  useEffect(() => {
+    if (!aToken || !dToken) navigate('/login');
+  }, [aToken, dToken]);
 
   return aToken || dToken ? (
     <div className="bg-[#F8F9FD]">
