@@ -12,6 +12,9 @@ const AdminContextProvider = (props) => {
   const [admin, setAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [doctors, setDoctors] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [dashboardData, setDashboardData] = useState([]);
+  const [events, setEvents] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -53,6 +56,7 @@ const AdminContextProvider = (props) => {
         setIsLoading(false);
         localStorage.setItem('aToken', data.token);
         setAToken(data.token);
+        navigate('/');
       } else {
         toast.error(data.message);
       }
@@ -139,6 +143,57 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  const getAppointments = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/admin/appointments`, {
+        headers: { aToken },
+      });
+
+      if (data.success) {
+        setAppointments(data.appointments);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
+  const getDashboardData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${backendUrl}/api/admin/dashboard-data`,
+        {
+          headers: { aToken },
+        }
+      );
+
+      if (data.success) {
+        setDashboardData(data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
+  const getEvents = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/admin/events`);
+      if (data.success) {
+        setEvents(data.events);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
   const value = {
     aToken,
     setAToken,
@@ -153,11 +208,25 @@ const AdminContextProvider = (props) => {
     addDoctor,
     getDoctors,
     doctors,
+    getAppointments,
+    appointments,
+    dashboardData,
+    getDashboardData,
+    getEvents,
+    events,
   };
 
   useEffect(() => {
     if (aToken) {
       getDoctors();
+    }
+  }, [aToken]);
+
+  useEffect(() => {
+    if (aToken) {
+      getAppointments();
+      getDashboardData();
+      getEvents();
     }
   }, [aToken]);
 

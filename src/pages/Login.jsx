@@ -4,6 +4,7 @@ import { FileLock2, Loader, Lock, MailMinus } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AdminContext } from '../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
+import { DoctorContext } from '../context/DoctorContext';
 
 const Login = () => {
   const [state, setState] = useState('Admin');
@@ -11,17 +12,18 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [adminKey, setAdminKey] = useState('');
   const { isLoading, adminLogin } = useContext(AdminContext);
+  const { doctorLogin } = useContext(DoctorContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //   if (state === 'Admin') {
-      //     await adminLogin(email, password, adminKey);
-      //   } else {
-      //     await doctorLogin(email, password);
-      //   }
-      await adminLogin(email, password, adminKey);
+      if (state === 'Admin') {
+        await adminLogin(email, password, adminKey);
+      } else {
+        await doctorLogin(email, password);
+      }
+      // await adminLogin(email, password, adminKey);
     } catch (error) {
       console.log(error);
     }
@@ -52,13 +54,15 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Input
-            icon={FileLock2}
-            type="password"
-            placeholder="Admin Key"
-            value={adminKey}
-            onChange={(e) => setAdminKey(e.target.value)}
-          />
+          {state === 'Admin' && (
+            <Input
+              icon={FileLock2}
+              type="password"
+              placeholder="Admin Key"
+              value={adminKey}
+              onChange={(e) => setAdminKey(e.target.value)}
+            />
+          )}
 
           <motion.button className="bg-orange-500 text-white w-full py-2 rounded-md text-base">
             {isLoading ? (

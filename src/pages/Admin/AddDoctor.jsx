@@ -128,7 +128,7 @@ const AddDoctor = () => {
                 <User className="size-5 text-orange-500" />
               </div>
               <input
-                type="test"
+                type="text"
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}

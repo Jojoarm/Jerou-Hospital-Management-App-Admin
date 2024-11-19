@@ -14,7 +14,7 @@ const Logo = () => {
         />
         <p className="font-semibold text-xs">Dashboard Panel</p>
       </div>
-      <h2 className="border px-2 py-0.5 rounded-full text-sm border-gray-500 text-gray-600">
+      <h2 className="border px-2.5 py-0.5 rounded-2xl text-xs md:text-sm md:bg-slate-600 md:text-white">
         {aToken ? 'Admin' : 'Doctor'}
       </h2>
     </div>

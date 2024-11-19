@@ -27,13 +27,19 @@ const Doctors = () => {
             <div className="p-4">
               <p className="text-gray-900 text-lg font-medium">{item.name}</p>
               <p className="text-gray-600 text-sm">{item.speciality}</p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={item.available}
-                  //   onChange={() => changeAvailability(item._id)}
-                />
-                <p>{item.available ? 'Available' : 'Not Available'}</p>
+              <div className="flex items-center gap-2 text-sm text-center">
+                <p
+                  className={`w-2 h-2 rounded-full ${
+                    item.available ? 'bg-green-500' : 'bg-gray-500'
+                  }`}
+                ></p>
+                <p
+                  className={`${
+                    item.available ? 'text-green-500' : 'text-gray-500'
+                  }`}
+                >
+                  {item.available ? 'Available' : 'Unavailable'}
+                </p>
               </div>
             </div>
           </motion.div>
